@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class StrokedRangeSliderThumbShape extends RangeSliderThumbShape {
-  /// Create a slider thumb that draws a circle.
   const StrokedRangeSliderThumbShape({
     this.strokeWidth,
     this.fillColor,
@@ -10,18 +9,10 @@ class StrokedRangeSliderThumbShape extends RangeSliderThumbShape {
     this.disabledThumbRadius,
   }) : assert(enabledThumbRadius != null);
 
-  /// The preferred radius of the round thumb shape when the slider is enabled.
-  ///
-  /// If it is not provided, then the material default of 10 is used.
   final double enabledThumbRadius;
   final Color strokeColor;
   final Color fillColor;
   final double strokeWidth;
-
-  /// The preferred radius of the round thumb shape when the slider is disabled.
-  ///
-  /// If no disabledRadius is provided, then it is equal to the
-  /// [enabledThumbRadius].
   final double disabledThumbRadius;
   double get _disabledThumbRadius =>  disabledThumbRadius ?? enabledThumbRadius;
 
@@ -37,6 +28,8 @@ class StrokedRangeSliderThumbShape extends RangeSliderThumbShape {
     assert(sliderTheme != null);
     final Canvas canvas = context.canvas;
     final double radius = enabledThumbRadius;
+
+    //Paint object to use in drawing stroke of specified width around the thumb
     final Paint strokePaint = Paint()
       ..color = strokeColor
       ..strokeWidth = strokeWidth
