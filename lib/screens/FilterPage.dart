@@ -88,7 +88,10 @@ class _FilterPageState extends State<FilterPage> {
                   ),
                 ],
               ),
-              AgeRangeSlider(),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0, bottom: 5.0, left: 23.0),
+                child: AgeRangeSlider(),
+              ),
             ],
           )
         ],
