@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/Profile.dart';
 import 'package:flirtr/RangeSliderShape.dart';
+import 'package:flirtr/SliderThumbShape.dart';
 
 void main() => runApp(FlirtrApp());
 
@@ -72,6 +73,12 @@ class FlirtrApp extends StatelessWidget {
           ),
           overlayColor: Color(0xffF8F4E3).withOpacity(0.3),
           overlayShape: RoundSliderOverlayShape(overlayRadius: 18.0),
+          thumbShape: SliderThumbShape(
+            enabledThumbRadius: 8.5,
+            fillColor: Color(0xffD19690),
+            strokeColor: Color(0xffF8F4E3),
+            strokeWidth: 5.0,
+          )
         ),
       ),
     );
