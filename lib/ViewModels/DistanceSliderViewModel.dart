@@ -5,6 +5,6 @@ class DistanceSliderViewModel extends StatesRebuilder {
 
   updateSlider(String sliderId, double value) {
     selectedDistance = value;
-    rebuildStates([sliderId]);
+    rebuildStates([sliderId, 'DistanceValueLabel']);
   }
 }
