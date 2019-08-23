@@ -68,7 +68,10 @@ class _FilterPageState extends State<FilterPage> {
             padding: const EdgeInsets.only(bottom: 15.0),
             child: AgeRangeSection(animation: animation,),
           ),
-          DistanceSection(animation: animation),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: DistanceSection(animation: animation),
+          ),
         ],
       ),
     );
