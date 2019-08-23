@@ -8,6 +8,6 @@ class SliderViewModel extends StatesRebuilder {
     startValue = start;
     endValue = end;
 
-    rebuildStates([sliderId]);
+    rebuildStates([sliderId, 'AgeRangeValueLabel']);
   }
 }

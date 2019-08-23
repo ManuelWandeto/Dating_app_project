@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flirtr/FilterPageEnterAnimation.dart';
 import 'package:flirtr/AppWidgets/ProfileOption.dart';
-import 'package:flirtr/AppWidgets/AgeRangeSlider.dart';
+import 'package:flirtr/AppWidgets/AgeRangeSection.dart';
 
 class FilterPage extends StatefulWidget {
   final AnimationController filterPageController;
@@ -16,6 +16,7 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
+
   FilterPageEnterAnimation animation;
   @override
   void initState() {
@@ -63,37 +64,7 @@ class _FilterPageState extends State<FilterPage> {
               ],
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  AnimatedBuilder(
-                    animation: animation.controller,
-                    builder: (context, child) {
-                      return Transform(
-                        transform: Matrix4.rotationX(animation.titleZrotation.value),
-                        child: FadeTransition(
-                          opacity: animation.titleOpacity,
-                          child: Text(
-                            'Age Range',
-                            style: Theme.of(context).textTheme.headline,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 5.0, left: 23.0),
-                child: AgeRangeSlider(),
-              ),
-            ],
-          )
+          AgeRangeSection(animation: animation,),
         ],
       ),
     );
