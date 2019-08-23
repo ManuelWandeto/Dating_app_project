@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flirtr/FilterPageEnterAnimation.dart';
 import 'package:flirtr/AppWidgets/ProfileOption.dart';
+import 'package:flirtr/AppWidgets/AgeRangeSlider.dart';
 
 class FilterPage extends StatefulWidget {
   final AnimationController filterPageController;
@@ -87,6 +88,7 @@ class _FilterPageState extends State<FilterPage> {
                   ),
                 ],
               ),
+              AgeRangeSlider(),
             ],
           )
         ],
@@ -94,5 +96,7 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 }
+
+
 
 
