@@ -5,9 +5,6 @@ class FilterPageEnterAnimation {
   AnimationController controller;
   FilterPageEnterAnimation({this.controller});
 
-  Animation<double> titleZrotation;
-  Animation<double> titleOpacity;
-  
   Animation<double> buildTitleZrotation(double begin, double end, Curve curve) {
     return Tween<double>(begin: (math.pi / 2), end: 0.0).animate(
       CurvedAnimation(
