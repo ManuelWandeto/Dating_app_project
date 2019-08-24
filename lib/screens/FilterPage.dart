@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flirtr/FilterPageEnterAnimation.dart';
-import 'package:flirtr/AppWidgets/ProfileOption.dart';
 import 'package:flirtr/AppWidgets/AgeRangeSection.dart';
 import 'package:flirtr/AppWidgets/DistanceSection.dart';
+import 'package:flirtr/ProfileOptionAnimation.dart';
 
 class FilterPage extends StatefulWidget {
   final AnimationController filterPageController;
@@ -39,9 +39,19 @@ class _FilterPageState extends State<FilterPage> {
             animation: animation.controller,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.rotationX(animation.buildTitleZrotation(0.40, 0.75, Curves.decelerate,).value),
+                transform: Matrix4.rotationX(animation
+                    .buildTitleZrotation(
+                      0.40,
+                      0.70,
+                      Curves.decelerate,
+                    )
+                    .value),
                 child: FadeTransition(
-                  opacity: animation.buildTitleOpacity(0.40, 0.75, Curves.easeIn,),
+                  opacity: animation.buildTitleOpacity(
+                    0.40,
+                    0.70,
+                    Curves.easeIn,
+                  ),
                   child: Text(
                     'Show only those;',
                     style: Theme.of(context).textTheme.headline,
@@ -57,16 +67,18 @@ class _FilterPageState extends State<FilterPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ProfileOption(optionText: 'With mutual friends',),
-                ProfileOption(optionText: 'With facebook account',),
-                ProfileOption(optionText: 'With instagram account',),
-                ProfileOption(optionText: 'With diary page',),
+                ProfileOptionAnimation(optionText: 'With mutual friends', beginAt: 0.45, endAt: 0.65, animation: animation,),
+                ProfileOptionAnimation(optionText: 'With facebook account', beginAt: 0.55, endAt: 0.75, animation: animation,),
+                ProfileOptionAnimation(optionText: 'With instagram account', beginAt: 0.60, endAt: 0.85, animation: animation,),
+                ProfileOptionAnimation(optionText: 'With diary page', beginAt: 0.65, endAt: 0.95, animation: animation,),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 15.0),
-            child: AgeRangeSection(animation: animation,),
+            child: AgeRangeSection(
+              animation: animation,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -77,9 +89,3 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 }
-
-
-
-
-
-

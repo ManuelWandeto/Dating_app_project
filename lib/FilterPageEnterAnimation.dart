@@ -30,4 +30,16 @@ class FilterPageEnterAnimation {
       ),
     );
   }
+
+  Animation<Offset> buildFractionalTranslation(Curve curve, double startAt, double endAt) {
+    return Tween<Offset>(
+      begin: Offset(0.20, 0),
+      end: Offset(0, 0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(startAt, endAt, curve: curve),
+      ),
+    );
+  }
 }

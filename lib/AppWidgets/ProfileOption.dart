@@ -3,7 +3,6 @@ import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:flirtr/AppWidgets/customCheckBox.dart';
 import 'package:flirtr/ViewModels/checkboxModel.dart';
 
-
 class ProfileOption extends StatefulWidget {
 
   ProfileOption({@required this.optionText, this.onTap});
