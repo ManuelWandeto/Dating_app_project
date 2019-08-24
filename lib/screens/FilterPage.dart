@@ -39,9 +39,9 @@ class _FilterPageState extends State<FilterPage> {
             animation: animation.controller,
             builder: (context, child) {
               return Transform(
-                transform: Matrix4.rotationX(animation.titleZrotation.value),
+                transform: Matrix4.rotationX(animation.buildTitleZrotation(0.40, 0.75, Curves.decelerate,).value),
                 child: FadeTransition(
-                  opacity: animation.titleOpacity,
+                  opacity: animation.buildTitleOpacity(0.40, 0.75, Curves.easeIn,),
                   child: Text(
                     'Show only those;',
                     style: Theme.of(context).textTheme.headline,
