@@ -37,9 +37,19 @@ class _AgeRangeSectionState extends State<AgeRangeSection> {
               animation: animation.controller,
               builder: (context, child) {
                 return Transform(
-                  transform: Matrix4.rotationX(animation.buildTitleZrotation(0.40, 0.75, Curves.decelerate,).value),
+                  transform: Matrix4.rotationX(animation
+                      .buildTitleZrotation(
+                        0.40,
+                        0.75,
+                        Curves.decelerate,
+                      )
+                      .value),
                   child: FadeTransition(
-                    opacity: animation.buildTitleOpacity(0.40, 0.75, Curves.easeIn,),
+                    opacity: animation.buildTitleOpacity(
+                      0.40,
+                      0.75,
+                      Curves.easeIn,
+                    ),
                     child: Text(
                       'Age Range',
                       style: Theme.of(context).textTheme.headline,
@@ -52,9 +62,28 @@ class _AgeRangeSectionState extends State<AgeRangeSection> {
               tag: 'AgeRangeValueLabel',
               viewModels: [model],
               builder: (context, tagId) {
-                return Text(
-                  '${model.startValue.toInt()} - ${model.endValue.toInt()}',
-                  style: Theme.of(context).textTheme.title.copyWith(fontSize: 16.0, letterSpacing: 16.0 * 0.02),
+                return Transform(
+                  transform: Matrix4.rotationX(animation
+                      .buildTitleZrotation(
+                        0.40,
+                        0.75,
+                        Curves.decelerate,
+                      )
+                      .value),
+                  child: FadeTransition(
+                    opacity: animation.buildTitleOpacity(
+                      0.40,
+                      0.75,
+                      Curves.easeIn,
+                    ),
+                    child: Text(
+                      '${model.startValue.toInt()} - ${model.endValue.toInt()}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .title
+                          .copyWith(fontSize: 16.0, letterSpacing: 16.0 * 0.02),
+                    ),
+                  ),
                 );
               },
             ),
@@ -62,11 +91,22 @@ class _AgeRangeSectionState extends State<AgeRangeSection> {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 20.0, bottom: 5.0, left: 23.0),
-          child: AgeRangeSlider(model: model),
+          child: AnimatedBuilder(
+            animation: animation.controller,
+            builder: (context, widget) {
+              return Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.diagonal3Values(
+                  animation.buildSliderScaleAnimation(0.60, 0.90).value,
+                  animation.buildSliderScaleAnimation(0.60, 0.90).value,
+                  1.0,
+                ),
+                child: AgeRangeSlider(model: model),
+              );
+            },
+          ),
         ),
       ],
     );
   }
 }
-
-

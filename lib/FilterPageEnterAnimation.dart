@@ -31,7 +31,8 @@ class FilterPageEnterAnimation {
     );
   }
 
-  Animation<Offset> buildFractionalTranslation(Curve curve, double startAt, double endAt) {
+  Animation<Offset> buildFractionalTranslation(
+      Curve curve, double startAt, double endAt) {
     return Tween<Offset>(
       begin: Offset(0.20, 0),
       end: Offset(0, 0),
@@ -39,6 +40,24 @@ class FilterPageEnterAnimation {
       CurvedAnimation(
         parent: controller,
         curve: Interval(startAt, endAt, curve: curve),
+      ),
+    );
+  }
+
+  Animation<double> buildSliderScaleAnimation(double beginAt, double endAt) {
+    return Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        reverseCurve: Interval(
+          beginAt,
+          endAt,
+          curve: Curves.decelerate,
+        ),
+        curve: Interval(
+          beginAt,
+          endAt,
+          curve: Curves.elasticOut,
+        ),
       ),
     );
   }
