@@ -3,6 +3,7 @@ import 'package:flirtr/FilterPageEnterAnimation.dart';
 import 'package:flirtr/AppWidgets/AgeRangeSection.dart';
 import 'package:flirtr/AppWidgets/DistanceSection.dart';
 import 'package:flirtr/ProfileOptionAnimation.dart';
+import 'package:flirtr/AppWidgets/ZRotateWidget.dart';
 
 class FilterPage extends StatefulWidget {
   final AnimationController filterPageController;
@@ -38,24 +39,13 @@ class _FilterPageState extends State<FilterPage> {
           AnimatedBuilder(
             animation: animation.controller,
             builder: (context, child) {
-              return Transform(
-                transform: Matrix4.rotationX(animation
-                    .buildTitleZrotation(
-                      0.40,
-                      0.70,
-                      Curves.decelerate,
-                    )
-                    .value),
-                child: FadeTransition(
-                  opacity: animation.buildTitleOpacity(
-                    0.40,
-                    0.70,
-                    Curves.easeIn,
-                  ),
-                  child: Text(
-                    'Show only those;',
-                    style: Theme.of(context).textTheme.headline,
-                  ),
+              return ZRotateWidget(
+                animation: animation,
+                beginAt: 0.40,
+                endAt: 0.70,
+                child: Text(
+                  'Show only those;',
+                  style: Theme.of(context).textTheme.headline,
                 ),
               );
             },

@@ -44,21 +44,5 @@ class FilterPageEnterAnimation {
     );
   }
 
-  Animation<double> buildSliderScaleAnimation(double beginAt, double endAt) {
-    return Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: controller,
-        reverseCurve: Interval(
-          beginAt,
-          endAt,
-          curve: Curves.decelerate,
-        ),
-        curve: Interval(
-          beginAt,
-          endAt,
-          curve: Curves.elasticOut,
-        ),
-      ),
-    );
-  }
+
 }
