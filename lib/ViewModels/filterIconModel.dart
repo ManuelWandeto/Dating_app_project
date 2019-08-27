@@ -22,7 +22,7 @@ class FilterIconModel extends StatesRebuilder {
       filterAnimation = 'CloseToFilters';
       filterPageController.reverse(from: 1.0);
       rebuildStates([iconTag]);
-      await Future.delayed(Duration(seconds: 1), () => showFilterPage = false);
+      await Future.delayed(filterPageController.duration, () => showFilterPage = false);
     }
 
     rebuildStates([iconTag, 'FilterPage']);
