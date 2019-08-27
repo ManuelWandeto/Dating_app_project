@@ -33,12 +33,13 @@ class BackgroundEffectLayer extends StatelessWidget {
             end: 0.9,
           ).animate(
             CurvedAnimation(
-                curve: Interval(
-                  0.0,
-                  0.50,
-                  curve: Curves.decelerate,
-                ),
-                parent: fadeController),
+              curve: Interval(
+                0.0,
+                0.50,
+                curve: Curves.decelerate,
+              ),
+              parent: fadeController,
+            ),
           ),
           child: DecoratedBox(
             decoration: BoxDecoration(

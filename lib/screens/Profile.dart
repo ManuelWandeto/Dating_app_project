@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flirtr/AppWidgets/BasicInfo.dart';
 import 'package:flirtr/AppWidgets/FilterIcon.dart';
 import 'dart:ui' as ui;
-import 'FilterPage.dart';
 import 'package:flirtr/AppWidgets/ProfileBackgroundEffect.dart';
 import 'package:flirtr/MockData.dart';
 import 'package:flirtr/UserProfile.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:flirtr/ViewModels/filterIconModel.dart';
+import 'package:flirtr/screens/FilterPage.dart';
 
 class Profile extends StatefulWidget {
   static const String id = 'Profile';
@@ -16,6 +16,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> with TickerProviderStateMixin {
+  GlobalKey bodyKey = GlobalKey();
   AnimationController filtersPageController;
   FilterIconModel filterModel;
   UserProfile currentProfile = MockData.profiles.first;
@@ -103,7 +104,9 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                     viewModels: [filterModel],
                     builder: (context, tagId) {
                       return FilterIcon(
-                        onPressed: () => filterModel.animate(tagId),
+                        onPressed: () {
+                          filterModel.animate(tagId);
+                        },
                         filterAnimation: filterModel.filterAnimation,
                       );
                     },
@@ -113,6 +116,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
             ),
           ),
           body: Stack(
+            key: bodyKey,
             fit: StackFit.expand,
             children: <Widget>[
               FadeTransition(
@@ -126,8 +130,18 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              FilterPage(
-                filterPageController: filtersPageController,
+              StateBuilder(
+                tag: 'FilterPage',
+                viewModels: [filterModel],
+                builder: (context, id) {
+                  return Visibility(
+                    visible: filterModel.showFilterPage,
+                    maintainState: true,
+                    child: FilterPage(
+                      filterPageController: filtersPageController,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -136,5 +150,3 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     );
   }
 }
-
-
