@@ -14,15 +14,14 @@ class FilterIconModel extends StatesRebuilder {
       filterAnimation = 'FilterToClose';
       showFilterPage = true;
       filterPageController.forward(from: 0.0);
-    } else if (filterAnimation == 'CloseToFilters') {
-      filterAnimation = 'FilterToClose';
-      showFilterPage = true;
-      filterPageController.forward(from: 0.0);
     } else {
       filterAnimation = 'CloseToFilters';
       filterPageController.reverse(from: 1.0);
       rebuildStates([iconTag]);
-      await Future.delayed(filterPageController.duration, () => showFilterPage = false);
+      await Future.delayed(filterPageController.duration, () {
+        showFilterPage = false;
+        filterAnimation = null;
+      });
     }
 
     rebuildStates([iconTag, 'FilterPage']);

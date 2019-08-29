@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flirtr/AppWidgets/BasicInfo.dart';
-import 'package:flirtr/AppWidgets/FilterIcon.dart';
 import 'dart:ui' as ui;
 import 'package:flirtr/AppWidgets/ProfileBackgroundEffect.dart';
 import 'package:flirtr/MockData.dart';
 import 'package:flirtr/UserProfile.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:flirtr/AppWidgets/ProfileBody.dart';
+import 'package:flirtr/ProfilePageAnimations.dart';
 import 'package:flirtr/ViewModels/filterIconModel.dart';
-import 'package:flirtr/screens/FilterPage.dart';
 
 class Profile extends StatefulWidget {
   static const String id = 'Profile';
@@ -16,10 +14,14 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> with TickerProviderStateMixin {
-  GlobalKey bodyKey = GlobalKey();
-  AnimationController filtersPageController;
   FilterIconModel filterModel;
+  GlobalKey bodyKey = GlobalKey();
+  PageController controller = PageController(
+    initialPage: 0,
+  );
+  AnimationController filtersPageController;
   UserProfile currentProfile = MockData.profiles.first;
+  ProfilePageAnimation profileAnimation;
 
   @override
   void initState() {
@@ -27,6 +29,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
       vsync: this,
       duration: Duration(seconds: 1),
     );
+    profileAnimation = ProfilePageAnimation(filtersPageController: filtersPageController);
     filterModel = FilterIconModel(filterPageController: filtersPageController);
     super.initState();
   }
@@ -39,22 +42,6 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Animation<double> backdropAnimation =
-        Tween<double>(begin: 0.0, end: 5.0).animate(
-      CurvedAnimation(
-          curve: Interval(0.0, 0.50, curve: Curves.decelerate),
-          reverseCurve: Interval(0.0, 0.35, curve: Curves.decelerate),
-          parent: filtersPageController),
-    );
-    Animation<double> opacityAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(
-      CurvedAnimation(
-          curve: Interval(0.0, 0.25, curve: Curves.easeOut),
-          parent: filtersPageController),
-    );
-
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -70,12 +57,12 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
           fadeController: filtersPageController,
         ),
         AnimatedBuilder(
-          animation: backdropAnimation,
+          animation: profileAnimation.backdropAnimation,
           builder: (context, child) {
             return BackdropFilter(
               filter: ui.ImageFilter.blur(
-                sigmaX: backdropAnimation.value,
-                sigmaY: backdropAnimation.value,
+                sigmaX: profileAnimation.backdropAnimation.value,
+                sigmaY: profileAnimation.backdropAnimation.value,
               ),
               child: Container(
                 color: Colors.transparent,
@@ -83,70 +70,22 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
             );
           },
         ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            titleSpacing: 0.0,
-            title: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  FadeTransition(
-                    opacity: opacityAnimation,
-                    child: Icon(
-                      Icons.menu,
-                    ),
-                  ),
-                  StateBuilder(
-                    viewModels: [filterModel],
-                    builder: (context, tagId) {
-                      return FilterIcon(
-                        onPressed: () {
-                          filterModel.animate(tagId);
-                        },
-                        filterAnimation: filterModel.filterAnimation,
-                      );
-                    },
-                  ),
-                ],
-              ),
+        PageView(
+          controller: controller,
+          children: <Widget>[
+            ProfileBody(
+                opacityAnimation: profileAnimation.opacityAnimation,
+                controller: controller,
+                currentProfile: currentProfile,
+                filtersPageController: filtersPageController,),
+            Container(
+              color: Color(0xff0A0D09).withOpacity(.9),
             ),
-          ),
-          body: Stack(
-            key: bodyKey,
-            fit: StackFit.expand,
-            children: <Widget>[
-              FadeTransition(
-                opacity: opacityAnimation,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: BasicInfo(
-                    profileName: currentProfile.userName,
-                    profileAge: currentProfile.userAge,
-                    profileLocation: currentProfile.userLocation,
-                  ),
-                ),
-              ),
-              StateBuilder(
-                tag: 'FilterPage',
-                viewModels: [filterModel],
-                builder: (context, id) {
-                  return Visibility(
-                    visible: filterModel.showFilterPage,
-                    maintainState: true,
-                    child: FilterPage(
-                      filterPageController: filtersPageController,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+          ],
         ),
       ],
     );
   }
 }
+
+

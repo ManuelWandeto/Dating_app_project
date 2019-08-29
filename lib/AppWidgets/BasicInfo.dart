@@ -3,10 +3,15 @@ import 'package:flirtr/presentation/app_bar_icons_icons.dart';
 import 'package:flirtr/AppWidgets/NextSectionIndicator.dart';
 
 class BasicInfo extends StatelessWidget {
+  final Function onIndicatorPressed;
   final String profileName;
   final int profileAge;
   final String profileLocation;
-  BasicInfo({this.profileName, this.profileAge, this.profileLocation});
+  BasicInfo(
+      {this.profileName,
+      this.profileAge,
+      this.profileLocation,
+      this.onIndicatorPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,10 @@ class BasicInfo extends StatelessWidget {
                 style: Theme.of(context).textTheme.display2,
               ),
               //TODO: make it so that user can tap anywhere around the icon
-              NextSectionIndicator(),
+              GestureDetector(
+                onTap: onIndicatorPressed,
+                child: NextSectionIndicator(),
+              ),
             ],
           ),
           SizedBox(
