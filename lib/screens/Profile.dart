@@ -6,6 +6,8 @@ import 'package:flirtr/UserProfile.dart';
 import 'package:flirtr/AppWidgets/ProfileBody.dart';
 import 'package:flirtr/ProfilePageAnimations.dart';
 import 'package:flirtr/ViewModels/filterIconModel.dart';
+import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:flirtr/ViewModels/PageViewModel.dart';
 
 class Profile extends StatefulWidget {
   static const String id = 'Profile';
@@ -15,6 +17,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   FilterIconModel filterModel;
+  PageViewModel pageViewModel;
   GlobalKey bodyKey = GlobalKey();
   PageController controller = PageController(
     initialPage: 0,
@@ -31,6 +34,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     );
     profileAnimation = ProfilePageAnimation(filtersPageController: filtersPageController);
     filterModel = FilterIconModel(filterPageController: filtersPageController);
+    pageViewModel = PageViewModel();
     super.initState();
   }
 
@@ -70,18 +74,28 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
             );
           },
         ),
-        PageView(
-          controller: controller,
-          children: <Widget>[
-            ProfileBody(
-                opacityAnimation: profileAnimation.opacityAnimation,
-                controller: controller,
-                currentProfile: currentProfile,
-                filtersPageController: filtersPageController,),
-            Container(
-              color: Color(0xff0A0D09).withOpacity(.9),
-            ),
-          ],
+        StateBuilder(
+          viewModels: [pageViewModel],
+          builder: (context, tagId) {
+            return PageView(
+              controller: controller,
+              physics: pageViewModel.physics,
+              children: <Widget>[
+                ProfileBody(
+                  disableParentViewScroll: () {
+                    pageViewModel.updatePageviewPhysics(tagId);
+                  },
+                  pageViewModel: pageViewModel,
+                  opacityAnimation: profileAnimation.opacityAnimation,
+                  controller: controller,
+                  currentProfile: currentProfile,
+                  filtersPageController: filtersPageController,),
+                Container(
+                  color: Color(0xff0A0D09).withOpacity(.9),
+                ),
+              ],
+            );
+          },
         ),
       ],
     );

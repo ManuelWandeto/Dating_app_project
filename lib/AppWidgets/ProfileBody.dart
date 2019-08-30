@@ -5,15 +5,19 @@ import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:flirtr/screens/FilterPage.dart';
 import 'package:flirtr/ViewModels/filterIconModel.dart';
 import 'package:flirtr/UserProfile.dart';
+import 'package:flirtr/ViewModels/PageViewModel.dart';
 
 class ProfileBody extends StatefulWidget {
   const ProfileBody({
+    @required this.pageViewModel,
+    @required this.disableParentViewScroll,
     @required this.opacityAnimation,
     @required this.controller,
     @required this.currentProfile,
     @required this.filtersPageController,
   });
-
+  final PageViewModel pageViewModel;
+  final Function disableParentViewScroll;
   final Animation<double> opacityAnimation;
   final PageController controller;
   final UserProfile currentProfile;
@@ -56,6 +60,7 @@ class _ProfileBodyState extends State<ProfileBody> with AutomaticKeepAliveClient
                   return FilterIcon(
                     onPressed: () {
                       filterModel.animate(tagId);
+                      widget.disableParentViewScroll();
                     },
                     filterAnimation: filterModel.filterAnimation,
                   );
@@ -74,9 +79,11 @@ class _ProfileBodyState extends State<ProfileBody> with AutomaticKeepAliveClient
               alignment: Alignment.bottomCenter,
               child: BasicInfo(
                 onIndicatorPressed: () {
-                  widget.controller.animateToPage(1,
-                      duration: Duration(seconds: 1),
-                      curve: Curves.easeOutQuint);
+                  if(widget.pageViewModel.physics == null) {
+                    widget.controller.animateToPage(1,
+                        duration: Duration(seconds: 1),
+                        curve: Curves.easeOutQuint);
+                  }
                 },
                 profileName: widget.currentProfile.userName,
                 profileAge: widget.currentProfile.userAge,
