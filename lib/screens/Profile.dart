@@ -8,6 +8,7 @@ import 'package:flirtr/ProfilePageAnimations.dart';
 import 'package:flirtr/ViewModels/filterIconModel.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:flirtr/ViewModels/PageViewModel.dart';
+import 'package:flirtr/screens/ProfileInfo.dart';
 
 class Profile extends StatefulWidget {
   static const String id = 'Profile';
@@ -90,9 +91,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                   controller: controller,
                   currentProfile: currentProfile,
                   filtersPageController: filtersPageController,),
-                Container(
-                  color: Color(0xff0A0D09).withOpacity(.9),
-                ),
+                ProfileInfo(),
               ],
             );
           },
