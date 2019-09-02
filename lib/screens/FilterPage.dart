@@ -17,7 +17,7 @@ class FilterPage extends StatefulWidget {
   _FilterPageState createState() => _FilterPageState();
 }
 
-class _FilterPageState extends State<FilterPage> {
+class _FilterPageState extends State<FilterPage> with AutomaticKeepAliveClientMixin<FilterPage>{
   FilterPageEnterAnimation animation;
   @override
   void initState() {
@@ -27,6 +27,8 @@ class _FilterPageState extends State<FilterPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    super.build(context);
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: 25.0,
@@ -78,4 +80,7 @@ class _FilterPageState extends State<FilterPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

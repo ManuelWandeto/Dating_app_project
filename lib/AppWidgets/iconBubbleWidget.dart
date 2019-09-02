@@ -12,7 +12,6 @@ class IconBubbleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: EclipsePainter(fillColor: Color(0xffD19690),),
-      size: widgetSize,
       child: Container(
         width: widgetSize.width,
         height: widgetSize.height,

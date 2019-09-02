@@ -27,7 +27,7 @@ class ProfileBody extends StatefulWidget {
   _ProfileBodyState createState() => _ProfileBodyState();
 }
 
-class _ProfileBodyState extends State<ProfileBody> with AutomaticKeepAliveClientMixin<ProfileBody> {
+class _ProfileBodyState extends State<ProfileBody> {
   FilterIconModel filterModel;
   @override
   void initState() {
@@ -36,7 +36,6 @@ class _ProfileBodyState extends State<ProfileBody> with AutomaticKeepAliveClient
   }
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -109,6 +108,4 @@ class _ProfileBodyState extends State<ProfileBody> with AutomaticKeepAliveClient
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
 }
