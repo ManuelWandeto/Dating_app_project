@@ -115,7 +115,19 @@ class _ProfileInfoState extends State<ProfileInfo> {
                       ),
                     ],
                   ),
-                  InterestChip(interest: 'Music',),
+                  Padding(
+                    padding: EdgeInsets.only(left: 40.0, top: 20.0,),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        InterestChip(interest: 'Music',),
+                        InterestChip(interest: 'Hiking',),
+                        InterestChip(interest: 'Netflix',),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ],

@@ -7,7 +7,6 @@ class InterestChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100,
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
@@ -15,7 +14,7 @@ class InterestChip extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 7.0),
         child: Center(
           child: Text(
             interest,
