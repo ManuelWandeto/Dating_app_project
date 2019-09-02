@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flirtr/AppWidgets/AlbumCountDisplayWidget.dart';
+import 'package:flirtr/AppWidgets/iconBubbleWidget.dart';
+import 'package:flirtr/AppWidgets/NextSectionIndicator.dart';
 
 class ProfileInfo extends StatefulWidget {
   @override
@@ -48,6 +50,19 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   )
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 35.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    IconBubbleWidget(icon: FontAwesomeIcons.user, widgetSize: Size(30.0, 30.0),),
+                    SizedBox(width: 10.0,),
+                    Text('Jolie Throne, 21', style: Theme.of(context).textTheme.headline,),
+                    Spacer(),
+                    NextSectionIndicator(),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -55,3 +70,5 @@ class _ProfileInfoState extends State<ProfileInfo> {
     );
   }
 }
+
+
