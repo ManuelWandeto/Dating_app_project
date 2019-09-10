@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 class AlbumCountDisplayWidget extends StatelessWidget {
   AlbumCountDisplayWidget(
-      {this.galleryPreviewImage, this.galleryIcon, this.galleryPhotoCount});
+      {this.galleryPreviewImage, this.galleryIcon, this.galleryPhotoCount, @required this.widgetSize});
 
   final AssetImage galleryPreviewImage;
   final IconData galleryIcon;
   final int galleryPhotoCount;
+  final Size widgetSize;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140,
+      height: widgetSize.height,
+      width: widgetSize.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(15.0),
