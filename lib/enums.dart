@@ -1,0 +1,4 @@
+enum GalleryType {
+  PhotoUploads,
+  InstagramUploads
+}

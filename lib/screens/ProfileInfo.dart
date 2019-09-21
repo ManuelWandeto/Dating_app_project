@@ -1,3 +1,4 @@
+import 'package:flirtr/UserProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -5,79 +6,87 @@ import 'package:flirtr/AppWidgets/AlbumCountDisplayWidget.dart';
 import 'package:flirtr/AppWidgets/iconBubbleWidget.dart';
 import 'package:flirtr/AppWidgets/NextSectionIndicator.dart';
 import 'package:flirtr/AppWidgets/InterestChip.dart';
+import 'package:flirtr/AppWidgets/MutualFriendWidget.dart';
+import 'package:flirtr/enums.dart';
 
 class ProfileInfo extends StatefulWidget {
+  ProfileInfo({this.currentProfile});
+
+  final UserProfile currentProfile;
   @override
   _ProfileInfoState createState() => _ProfileInfoState();
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
+  UserProfile currentProfile;
+
+  @override
+  void initState() {
+    currentProfile = widget.currentProfile;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Color(0xff0A0D09).withOpacity(.9),
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(left: 30.0, top: 25.0, right: 10.0),
+          padding: EdgeInsets.only(left: 30.0, right: 10.0),
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            reverse: true,
             scrollDirection: Axis.vertical,
             child: Column(
-              //TODO: FIX OVERFLOWS BY IMPLEMENTING SCROLL
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 10,
-                      child: AlbumCountDisplayWidget(
-                        widgetSize: Size(130, 130),
-                        galleryIcon: FontAwesomeIcons.camera,
-                        galleryPhotoCount: 28,
-                        galleryPreviewImage:
-                            AssetImage('images/joliethronin.jpg'),
+                Padding(
+                  padding: const EdgeInsets.only(top: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 10,
+                        child: AlbumCountDisplayWidget(
+                          currentProfile: currentProfile,
+                          galleryType: GalleryType.PhotoUploads,
+                          widgetSize: Size(130, 130),
+                          galleryIcon: FontAwesomeIcons.camera,
+                          galleryPhotoCount: 28,
+                          galleryPreviewImage:
+                              currentProfile.userPhotoUploads.first,
+                        ),
                       ),
-                    ),
-                    Spacer(
-                      flex: 2,
-                    ),
-                    Expanded(
-                      flex: 10,
-                      child: AlbumCountDisplayWidget(
-                        widgetSize: Size(130, 130),
-                        galleryIcon: FontAwesomeIcons.instagram,
-                        galleryPhotoCount: 145,
-                        galleryPreviewImage: AssetImage('images/darkthrone.jpg'),
+                      Spacer(
+                        flex: 2,
                       ),
-                    ),
-                    Spacer(
-                      flex: 5,
-                    )
-                  ],
+                      Expanded(
+                        flex: 10,
+                        child: AlbumCountDisplayWidget(
+                          currentProfile: currentProfile,
+                          galleryType: GalleryType.InstagramUploads,
+                          widgetSize: Size(130, 130),
+                          galleryIcon: FontAwesomeIcons.instagram,
+                          galleryPhotoCount: 145,
+                          galleryPreviewImage:
+                              AssetImage('images/darkthrone.jpg'),
+                        ),
+                      ),
+                      Spacer(
+                        flex: 5,
+                      )
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      IconBubbleWidget(
-                        icon: FontAwesomeIcons.user,
-                        widgetSize: Size(30.0, 30.0),
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(
-                        'Jolie Throne, 21',
-                        style: Theme.of(context).textTheme.headline,
-                      ),
+                      _buildSectionTitle(title: '${currentProfile.userName}, ${currentProfile.userAge}', icon: FontAwesomeIcons.user,),
                       Spacer(),
-                      //TODO: FIX NEXT SECTION INDICATOR ANIMATION CAUSING A SHAKE IN SIZE
-                      NextSectionIndicator(),
+                      NextSectionIndicator(beginSize: 24, endSize: 28,),
                     ],
                   ),
                 ),
@@ -87,23 +96,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(
-                        //TODO: DONT REPEAT THIS CODE
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          IconBubbleWidget(
-                            icon: FontAwesomeIcons.info,
-                            widgetSize: Size(30.0, 30.0),
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Text(
-                            'Basic Info',
-                            style: Theme.of(context).textTheme.headline,
-                          ),
-                        ],
-                      ),
+                      _buildSectionTitle(title: 'Basic Info', icon: FontAwesomeIcons.info,),
                       Padding(
                         padding: EdgeInsets.only(
                           left: 40.0,
@@ -126,7 +119,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               height: 10.0,
                             ),
                             _buildOccupationWidget(
-                                FontAwesomeIcons.home, 'Nairobi, Kenya'),
+                                FontAwesomeIcons.home, currentProfile.userLocation),
                           ],
                         ),
                       ),
@@ -140,24 +133,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          IconBubbleWidget(
-                            icon: FontAwesomeIcons.smileBeam,
-                            widgetSize: Size(30.0, 30.0),
-                            yAlign: -.15,
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Text(
-                            'Mutual Interests',
-                            style: Theme.of(context).textTheme.headline,
-                          ),
-                        ],
-                      ),
+                      _buildSectionTitle(
+                          title: 'Mutual Interests',
+                          icon: FontAwesomeIcons.smileBeam,
+                          yAlign: -.15,),
                       Padding(
                         padding: EdgeInsets.only(
                           left: 40.0,
@@ -198,24 +177,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      //TODO: DONT REPEAT THIS CODE
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        IconBubbleWidget(
-                          icon: FontAwesomeIcons.userFriends,
-                          widgetSize: Size(30.0, 30.0),
-                          xAlign: -.20,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text(
-                          'Mutual Friends',
-                          style: Theme.of(context).textTheme.headline,
-                        ),
-                      ],
-                    ),
+                    _buildSectionTitle(title: 'Mutual Friends', icon: FontAwesomeIcons.userFriends, xAlign: -.20),
                     Padding(
                       padding: EdgeInsets.only(
                         left: 40.0,
@@ -223,23 +185,26 @@ class _ProfileInfoState extends State<ProfileInfo> {
                       ),
                       child: Container(
                         height: 130.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
                           children: <Widget>[
-                            ClipRRect(
-                              child: Image(
-                                image: AssetImage('images/beautiful_black_child.jpg'),
-                                fit: BoxFit.cover,
-                                height: 100,
-                                width: 100,
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(10.0),),
+                            MutualFriendWidget(
+                              friendImage:
+                                  AssetImage('images/brendaWairimu.jpg'),
+                              friendName: 'Brenda Wairimu',
                             ),
-                            SizedBox(height: 5.0,),
-                            Text(
-                              'Sheila_nduta',
-                              style: Theme.of(context).textTheme.title.copyWith(fontSize: 16.0),
+                            MutualFriendWidget(
+                              friendImage: AssetImage('images/brandyMaina.jpg'),
+                              friendName: 'Brandy maina',
+                            ),
+                            MutualFriendWidget(
+                              friendImage: AssetImage('images/wavinye.jpg'),
+                              friendName: 'wavinye',
+                            ),
+                            MutualFriendWidget(
+                              friendImage: AssetImage('images/manuel.jpg'),
+                              friendName: 'Manuel',
                             ),
                           ],
                         ),
@@ -275,4 +240,33 @@ class _ProfileInfoState extends State<ProfileInfo> {
       ],
     );
   }
+
+  Row _buildSectionTitle(
+      {String title,
+      IconData icon,
+      double yAlign = -.25,
+      double xAlign = 0.0,}) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        IconBubbleWidget(
+          icon: icon,
+          yAlign: yAlign,
+          xAlign: xAlign,
+        ),
+        SizedBox(
+          width: 10.0,
+        ),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.headline,
+        ),
+      ],
+    );
+  }
 }
+
+
+
+

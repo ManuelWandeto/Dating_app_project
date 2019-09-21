@@ -7,7 +7,11 @@ class MockData {
       userName: 'Jolie Throne',
       userAge: 21,
       userLocation: 'Nairobi, Kenya',
-      userPhotoUploads: [AssetImage('images/beautiful_black_child.jpg')],
+      userPhotoUploads: [
+        AssetImage('images/beautiful_black_child.jpg'),
+        AssetImage('images/darkthrone.jpg'),
+        AssetImage('images/joliethronin.jpg'),
+      ],
     ),
   ];
 }

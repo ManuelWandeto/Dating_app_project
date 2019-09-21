@@ -3,6 +3,10 @@ import 'package:animator/animator.dart';
 import 'package:flirtr/presentation/app_bar_icons_icons.dart';
 
 class NextSectionIndicator extends StatelessWidget {
+  NextSectionIndicator({this.beginSize = 26.0, this.endSize = 30.0});
+
+  final double beginSize;
+  final double endSize;
   @override
   Widget build(BuildContext context) {
     return Animator(
@@ -10,7 +14,7 @@ class NextSectionIndicator extends StatelessWidget {
         'AnimateOpacity':
         Tween<double>(begin: .4, end: 1.0),
         'AnimateSize':
-        Tween<double>(begin: 26.0, end: 30.0),
+        Tween<double>(begin: beginSize, end: endSize),
         'AnimateTranslate': Tween<Offset>(
             begin: Offset(-0.65, 0), end: Offset(0, 0)),
       },

@@ -91,7 +91,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                   controller: controller,
                   currentProfile: currentProfile,
                   filtersPageController: filtersPageController,),
-                ProfileInfo(),
+                ProfileInfo(currentProfile: currentProfile,),
+
               ],
             );
           },

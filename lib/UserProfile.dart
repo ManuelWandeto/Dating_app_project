@@ -5,6 +5,8 @@ class UserProfile {
   int userAge;
   String userLocation;
   List<ImageProvider> userPhotoUploads = [];
-  UserProfile({this.userName, this.userAge, this.userLocation, this.userPhotoUploads});
+  List<ImageProvider> userInstagramMedia = [];
+  UserProfile({this.userName, this.userAge, this.userLocation, this.userPhotoUploads, this.userInstagramMedia});
+
 
 }
