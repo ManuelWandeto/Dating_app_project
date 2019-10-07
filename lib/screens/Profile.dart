@@ -9,6 +9,7 @@ import 'package:flirtr/ViewModels/filterIconModel.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:flirtr/ViewModels/PageViewModel.dart';
 import 'package:flirtr/screens/ProfileInfo.dart';
+import 'DiaryPage.dart';
 
 class Profile extends StatefulWidget {
   static const String id = 'Profile';
@@ -47,59 +48,76 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: currentProfile.userPhotoUploads.first,
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onVerticalDragEnd: (details) {
+        if(details.velocity.pixelsPerSecond.dy < 0) {
+          setState(() {
+            currentProfile = MockData.profiles[1];
+            print(details.velocity.pixelsPerSecond.dy);
+          });
+        } else if(details.velocity.pixelsPerSecond.dy > 0) {
+          setState(() {
+            currentProfile = MockData.profiles[0];
+            print(details.velocity.pixelsPerSecond.dy);
+          });
+        }
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(currentProfile.userUploads.first.url),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        BackgroundEffectLayer(
-          fadeController: filtersPageController,
-        ),
-        AnimatedBuilder(
-          animation: profileAnimation.backdropAnimation,
-          builder: (context, child) {
-            return BackdropFilter(
-              filter: ui.ImageFilter.blur(
-                sigmaX: profileAnimation.backdropAnimation.value,
-                sigmaY: profileAnimation.backdropAnimation.value,
-              ),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            );
-          },
-        ),
-        StateBuilder(
-          viewModels: [pageViewModel],
-          builder: (context, tagId) {
-            return PageView(
-              controller: controller,
-              physics: pageViewModel.physics,
-              children: <Widget>[
-                ProfileBody(
-                  disableParentViewScroll: () {
-                    pageViewModel.updatePageviewPhysics(tagId);
-                  },
-                  pageViewModel: pageViewModel,
-                  opacityAnimation: profileAnimation.opacityAnimation,
-                  controller: controller,
-                  currentProfile: currentProfile,
-                  filtersPageController: filtersPageController,),
-                ProfileInfo(currentProfile: currentProfile,),
+          BackgroundEffectLayer(
+            fadeController: filtersPageController,
+          ),
+          AnimatedBuilder(
+            animation: profileAnimation.backdropAnimation,
+            builder: (context, child) {
+              return BackdropFilter(
+                filter: ui.ImageFilter.blur(
+                  sigmaX: profileAnimation.backdropAnimation.value,
+                  sigmaY: profileAnimation.backdropAnimation.value,
+                ),
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              );
+            },
+          ),
+          StateBuilder(
+            viewModels: [pageViewModel],
+            builder: (context, tagId) {
+              return PageView(
+                controller: controller,
+                physics: pageViewModel.physics,
+                children: <Widget>[
+                  ProfileBody(
+                    disableParentViewScroll: () {
+                      pageViewModel.updatePageviewPhysics(tagId);
+                    },
+                    pageViewModel: pageViewModel,
+                    opacityAnimation: profileAnimation.opacityAnimation,
+                    controller: controller,
+                    currentProfile: currentProfile,
+                    filtersPageController: filtersPageController,),
+                  ProfileInfo(currentProfile: currentProfile, pageController: controller,),
+                  DiaryPage(currentProfile: currentProfile, pageController: controller),
 
-              ],
-            );
-          },
-        ),
-      ],
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
+
 
 

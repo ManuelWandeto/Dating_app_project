@@ -27,11 +27,20 @@ class ProfileBody extends StatefulWidget {
   _ProfileBodyState createState() => _ProfileBodyState();
 }
 
-class _ProfileBodyState extends State<ProfileBody> {
+class _ProfileBodyState extends State<ProfileBody> with SingleTickerProviderStateMixin{
+
+  bool menuIsOpen = false;
   FilterIconModel filterModel;
+  AnimationController menuController;
+
   @override
   void initState() {
     filterModel = FilterIconModel(filterPageController: widget.filtersPageController);
+    menuController = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+
     super.initState();
   }
   @override
@@ -49,8 +58,22 @@ class _ProfileBodyState extends State<ProfileBody> {
             children: <Widget>[
               FadeTransition(
                 opacity: widget.opacityAnimation,
-                child: Icon(
-                  Icons.menu,
+                child: GestureDetector(
+                  onTap: () {
+                    if(menuIsOpen != true) {
+                      menuController.forward(from: 0.0);
+                      menuIsOpen = true;
+                    } else {
+                      menuController.reverse(from: 1.0);
+                      menuIsOpen = false;
+                    }
+                  },
+                  child: AnimatedIcon(
+                    color: Color(0xffEDF4ED),
+                    icon: AnimatedIcons.menu_close,
+                    size: 30.0,
+                    progress: CurvedAnimation(parent: menuController, curve: Curves.bounceIn,),
+                  ),
                 ),
               ),
               StateBuilder(
@@ -80,7 +103,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 onIndicatorPressed: () {
                   if(widget.pageViewModel.physics == null) {
                     widget.controller.animateToPage(1,
-                        duration: Duration(seconds: 1),
+                        duration: Duration(seconds: 2),
                         curve: Curves.easeOutQuint);
                   }
                 },

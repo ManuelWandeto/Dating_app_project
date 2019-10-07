@@ -1,8 +1,11 @@
+import 'package:flirtr/AppWidgets/VideoWidget.dart';
+import 'package:flirtr/UserMedia.dart';
 import 'package:flirtr/UserProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flirtr/AppWidgets/iconBubbleWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flirtr/enums.dart';
+import 'package:flirtr/AppWidgets/PhotoWidget.dart';
 
 class GalleryPage extends StatefulWidget {
   final GalleryType galleryType;
@@ -14,12 +17,12 @@ class GalleryPage extends StatefulWidget {
 }
 
 class _GalleryPageState extends State<GalleryPage> {
-  List<ImageProvider> images;
+  List<UserMedia> images;
 
   @override
   void initState() {
     images = (widget.galleryType == GalleryType.PhotoUploads)
-        ? widget.currentProfile.userPhotoUploads
+        ? widget.currentProfile.userUploads
         : widget.currentProfile.userInstagramMedia;
 
     super.initState();
@@ -67,10 +70,13 @@ class _GalleryPageState extends State<GalleryPage> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(
-                        Icons.close,
-                        color: Color(0xffF8F4E3),
-                        size: 28.0,
+                      child: Hero(
+                        tag: 'CloseButton',
+                        child: Icon(
+                          Icons.close,
+                          color: Color(0xffF8F4E3),
+                          size: 28.0,
+                        ),
                       ),
                     ),
                   ],
@@ -84,16 +90,7 @@ class _GalleryPageState extends State<GalleryPage> {
                   scrollDirection: Axis.horizontal,
                   enableInfiniteScroll: false,
                   items: images.map((image) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width * .90,
-                      margin: EdgeInsets.symmetric(horizontal: 6.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                          image: DecorationImage(
-                            image: image,
-                            fit: BoxFit.cover
-                          ),),
-                    );
+                    return _buildMediaItem(image);
                   }).toList(),
                 ),
               )
@@ -103,4 +100,19 @@ class _GalleryPageState extends State<GalleryPage> {
       ),
     );
   }
+
+  Widget _buildMediaItem(UserMedia image) {
+    if(image.mediaType == MediaType.Photo) {
+      return PhotoWidget(url: image.url,);
+    } else {
+      return VideoWidget(url: image.url,);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
+
+

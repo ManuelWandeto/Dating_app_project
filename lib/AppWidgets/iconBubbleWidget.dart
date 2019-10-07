@@ -9,6 +9,7 @@ class IconBubbleWidget extends StatelessWidget {
     this.xAlign = 0,
     this.iconSize = 15.0,
     this.widgetColor = const Color(0xffD19690),
+    this.widgetChild,
   });
 
   final Size widgetSize;
@@ -17,9 +18,19 @@ class IconBubbleWidget extends StatelessWidget {
   final double xAlign;
   final Color widgetColor;
   final double iconSize;
+  final Widget widgetChild;
 
   @override
   Widget build(BuildContext context) {
+    var child = (widgetChild != null) ? widgetChild : Align(
+      alignment: Alignment(xAlign, yAlign),
+      child: Icon(
+        icon,
+        size: iconSize,
+        color: Color(0xff0A0D09),
+      ),
+    );
+
     return CustomPaint(
       painter: EclipsePainter(
         fillColor: widgetColor,
@@ -27,14 +38,7 @@ class IconBubbleWidget extends StatelessWidget {
       child: Container(
         width: widgetSize.width,
         height: widgetSize.height,
-        child: Align(
-          alignment: Alignment(xAlign, yAlign),
-          child: Icon(
-            icon,
-            size: iconSize,
-            color: Color(0xff0A0D09),
-          ),
-        ),
+        child: child,
       ),
     );
   }

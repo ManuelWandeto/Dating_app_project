@@ -2,22 +2,16 @@ import 'package:flirtr/UserProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flirtr/screens/GalleryPage.dart';
 import 'package:flirtr/enums.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AlbumCountDisplayWidget extends StatelessWidget {
   AlbumCountDisplayWidget({
-    this.galleryPreviewImage,
-    this.galleryIcon,
-    this.galleryPhotoCount,
-    @required this.widgetSize,
     @required this.galleryType,
     @required this.currentProfile,
   });
 
   final UserProfile currentProfile;
-  final AssetImage galleryPreviewImage;
-  final IconData galleryIcon;
-  final int galleryPhotoCount;
-  final Size widgetSize;
+  final Size widgetSize = Size(130, 130);
   final GalleryType galleryType;
 
   @override
@@ -43,7 +37,7 @@ class AlbumCountDisplayWidget extends StatelessWidget {
             Radius.circular(15.0),
           ),
           image: DecorationImage(
-            image: galleryPreviewImage,
+            image: galleryType == GalleryType.PhotoUploads ? AssetImage(currentProfile.userUploads.first.url) : AssetImage(currentProfile.userInstagramMedia.first.url),
             fit: BoxFit.cover,
           ),
         ),
@@ -62,7 +56,7 @@ class AlbumCountDisplayWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Icon(
-                    galleryIcon,
+                    (galleryType == GalleryType.PhotoUploads) ? FontAwesomeIcons.camera : FontAwesomeIcons.instagram,
                     color: Color(0xffF8F4E3),
                     size: 24.0,
                   ),
@@ -70,7 +64,7 @@ class AlbumCountDisplayWidget extends StatelessWidget {
                     width: 8,
                   ),
                   Text(
-                    galleryPhotoCount.toString(),
+                    galleryType == GalleryType.PhotoUploads ? currentProfile.userUploads.length.toString() : currentProfile.userInstagramMedia.length.toString(),
                     style: Theme.of(context)
                         .textTheme
                         .title

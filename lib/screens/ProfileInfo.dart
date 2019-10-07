@@ -10,8 +10,9 @@ import 'package:flirtr/AppWidgets/MutualFriendWidget.dart';
 import 'package:flirtr/enums.dart';
 
 class ProfileInfo extends StatefulWidget {
-  ProfileInfo({this.currentProfile});
+  ProfileInfo({this.currentProfile, this.pageController});
 
+  final PageController pageController;
   final UserProfile currentProfile;
   @override
   _ProfileInfoState createState() => _ProfileInfoState();
@@ -40,53 +41,29 @@ class _ProfileInfoState extends State<ProfileInfo> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 10,
-                        child: AlbumCountDisplayWidget(
-                          currentProfile: currentProfile,
-                          galleryType: GalleryType.PhotoUploads,
-                          widgetSize: Size(130, 130),
-                          galleryIcon: FontAwesomeIcons.camera,
-                          galleryPhotoCount: 28,
-                          galleryPreviewImage:
-                              currentProfile.userPhotoUploads.first,
-                        ),
-                      ),
-                      Spacer(
-                        flex: 2,
-                      ),
-                      Expanded(
-                        flex: 10,
-                        child: AlbumCountDisplayWidget(
-                          currentProfile: currentProfile,
-                          galleryType: GalleryType.InstagramUploads,
-                          widgetSize: Size(130, 130),
-                          galleryIcon: FontAwesomeIcons.instagram,
-                          galleryPhotoCount: 145,
-                          galleryPreviewImage:
-                              AssetImage('images/darkthrone.jpg'),
-                        ),
-                      ),
-                      Spacer(
-                        flex: 5,
-                      )
-                    ],
-                  ),
-                ),
+                _buildAlbumDisplaySection(currentProfile),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      _buildSectionTitle(title: '${currentProfile.userName}, ${currentProfile.userAge}', icon: FontAwesomeIcons.user,),
+                      _buildSectionTitle(
+                        title:
+                            '${currentProfile.userName}, ${currentProfile.userAge}',
+                        icon: FontAwesomeIcons.user,
+                      ),
                       Spacer(),
-                      NextSectionIndicator(beginSize: 24, endSize: 28,),
+                      GestureDetector(
+                        onTap: () => widget.pageController.animateToPage(
+                          2,
+                          duration: Duration(seconds: 2),
+                          curve: Curves.easeOutQuint,
+                        ),
+                        child: NextSectionIndicator(
+                          beginSize: 24,
+                          endSize: 28,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -96,33 +73,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _buildSectionTitle(title: 'Basic Info', icon: FontAwesomeIcons.info,),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: 40.0,
-                          top: 15.0,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            _buildOccupationWidget(FontAwesomeIcons.briefcase,
-                                'Independent Lawyer'),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _buildOccupationWidget(
-                                FontAwesomeIcons.graduationCap,
-                                'Cambridge international'),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _buildOccupationWidget(
-                                FontAwesomeIcons.home, currentProfile.userLocation),
-                          ],
-                        ),
+                      _buildSectionTitle(
+                        title: 'Basic Info',
+                        icon: FontAwesomeIcons.info,
                       ),
+                      _buildBasicInfo(currentProfile),
                     ],
                   ),
                 ),
@@ -134,9 +89,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       _buildSectionTitle(
-                          title: 'Mutual Interests',
-                          icon: FontAwesomeIcons.smileBeam,
-                          yAlign: -.15,),
+                        title: 'Mutual Interests',
+                        icon: FontAwesomeIcons.smileBeam,
+                        yAlign: -.15,
+                      ),
                       Padding(
                         padding: EdgeInsets.only(
                           left: 40.0,
@@ -177,7 +133,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _buildSectionTitle(title: 'Mutual Friends', icon: FontAwesomeIcons.userFriends, xAlign: -.20),
+                    _buildSectionTitle(
+                        title: 'Mutual Friends',
+                        icon: FontAwesomeIcons.userFriends,
+                        xAlign: -.20),
                     Padding(
                       padding: EdgeInsets.only(
                         left: 40.0,
@@ -191,19 +150,19 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           children: <Widget>[
                             MutualFriendWidget(
                               friendImage:
-                                  AssetImage('images/brendaWairimu.jpg'),
+                                  AssetImage('images/jolieThrone/brendaWairimu.jpg'),
                               friendName: 'Brenda Wairimu',
                             ),
                             MutualFriendWidget(
-                              friendImage: AssetImage('images/brandyMaina.jpg'),
+                              friendImage: AssetImage('images/jolieThrone/brandyMaina.jpg'),
                               friendName: 'Brandy maina',
                             ),
                             MutualFriendWidget(
-                              friendImage: AssetImage('images/wavinye.jpg'),
+                              friendImage: AssetImage('images/jolieThrone/wavinye.jpg'),
                               friendName: 'wavinye',
                             ),
                             MutualFriendWidget(
-                              friendImage: AssetImage('images/manuel.jpg'),
+                              friendImage: AssetImage('images/jolieThrone/manuel.jpg'),
                               friendName: 'Manuel',
                             ),
                           ],
@@ -221,31 +180,35 @@ class _ProfileInfoState extends State<ProfileInfo> {
   }
 
   Widget _buildOccupationWidget(IconData icon, String occupation) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Icon(
-          icon,
-          size: 15.0,
-          color: Color(0xffF8F4E3),
-        ),
-        SizedBox(
-          width: 10.0,
-        ),
-        Text(
-          occupation,
-          style: Theme.of(context).textTheme.title,
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            icon,
+            size: 15.0,
+            color: Color(0xffF8F4E3),
+          ),
+          SizedBox(
+            width: 10.0,
+          ),
+          Text(
+            occupation,
+            style: Theme.of(context).textTheme.title,
+          ),
+        ],
+      ),
     );
   }
 
-  Row _buildSectionTitle(
-      {String title,
-      IconData icon,
-      double yAlign = -.25,
-      double xAlign = 0.0,}) {
+  Row _buildSectionTitle({
+    String title,
+    IconData icon,
+    double yAlign = -.25,
+    double xAlign = 0.0,
+  }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -265,8 +228,59 @@ class _ProfileInfoState extends State<ProfileInfo> {
       ],
     );
   }
+
+  Widget _buildAlbumDisplaySection(UserProfile currentProfile) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 25.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          AlbumCountDisplayWidget(
+            currentProfile: currentProfile,
+            galleryType: GalleryType.PhotoUploads,
+          ),
+          Spacer(
+            flex: 2,
+          ),
+          (currentProfile.userInstagramMedia != null)
+              ? AlbumCountDisplayWidget(
+                  currentProfile: currentProfile,
+                  galleryType: GalleryType.InstagramUploads,
+                )
+              : Container(),
+          Spacer(
+            flex: 5,
+          )
+        ],
+      ),
+    );
+  }
+
+  _buildBasicInfo(UserProfile currentProfile) {
+    var basicInfo = currentProfile.basicInfo;
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 40.0,
+        top: 15.0,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildOccupationWidget(
+              FontAwesomeIcons.home, currentProfile.userLocation),
+          (basicInfo['Work'] != null)
+              ? _buildOccupationWidget(
+                  FontAwesomeIcons.briefcase, basicInfo['Work'])
+              : SizedBox(),
+          (basicInfo['School'] != null)
+              ? _buildOccupationWidget(
+                  FontAwesomeIcons.graduationCap, basicInfo['School'])
+              : SizedBox(),
+        ],
+      ),
+    );
+  }
 }
-
-
-
-

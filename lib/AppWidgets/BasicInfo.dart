@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flirtr/presentation/app_bar_icons_icons.dart';
 import 'package:flirtr/AppWidgets/NextSectionIndicator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BasicInfo extends StatelessWidget {
   final Function onIndicatorPressed;
@@ -40,13 +41,19 @@ class BasicInfo extends StatelessWidget {
             height: 3.0,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
                 profileName,
                 style: Theme.of(context).textTheme.display1,
               ),
+              Spacer(flex: 2,),
+              Icon(
+                FontAwesomeIcons.solidHeart,
+                color: Color(0xffDB6F6D),
+                size: 36,
+              ),
+              Spacer(flex: 1,),
               Icon(
                 AppBarIcons.star,
                 color: Color(0xffE5AEAA),
