@@ -9,6 +9,7 @@ import 'package:flirtr/ViewModels/PageViewModel.dart';
 
 class ProfileBody extends StatefulWidget {
   const ProfileBody({
+    @required this.onMenuTap,
     @required this.pageViewModel,
     @required this.disableParentViewScroll,
     @required this.opacityAnimation,
@@ -16,6 +17,7 @@ class ProfileBody extends StatefulWidget {
     @required this.currentProfile,
     @required this.filtersPageController,
   });
+  final Function onMenuTap;
   final PageViewModel pageViewModel;
   final Function disableParentViewScroll;
   final Animation<double> opacityAnimation;
@@ -37,7 +39,7 @@ class _ProfileBodyState extends State<ProfileBody> with SingleTickerProviderStat
   void initState() {
     filterModel = FilterIconModel(filterPageController: widget.filtersPageController);
     menuController = AnimationController(
-      duration: Duration(milliseconds: 500),
+      duration: Duration(seconds: 1),
       vsync: this,
     );
 
@@ -63,16 +65,18 @@ class _ProfileBodyState extends State<ProfileBody> with SingleTickerProviderStat
                     if(menuIsOpen != true) {
                       menuController.forward(from: 0.0);
                       menuIsOpen = true;
+                      widget.onMenuTap();
                     } else {
                       menuController.reverse(from: 1.0);
                       menuIsOpen = false;
+                      widget.onMenuTap();
                     }
                   },
                   child: AnimatedIcon(
                     color: Color(0xffEDF4ED),
                     icon: AnimatedIcons.menu_close,
-                    size: 30.0,
-                    progress: CurvedAnimation(parent: menuController, curve: Curves.bounceIn,),
+                    size: 35.0,
+                    progress: CurvedAnimation(parent: menuController, curve: Curves.decelerate, reverseCurve: Curves.easeIn),
                   ),
                 ),
               ),

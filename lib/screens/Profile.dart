@@ -6,13 +6,18 @@ import 'package:flirtr/UserProfile.dart';
 import 'package:flirtr/AppWidgets/ProfileBody.dart';
 import 'package:flirtr/ProfilePageAnimations.dart';
 import 'package:flirtr/ViewModels/filterIconModel.dart';
+import 'package:kf_drawer/kf_drawer.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:flirtr/ViewModels/PageViewModel.dart';
 import 'package:flirtr/screens/ProfileInfo.dart';
 import 'DiaryPage.dart';
 
-class Profile extends StatefulWidget {
+// ignore: must_be_immutable
+class Profile extends KFDrawerContent {
   static const String id = 'Profile';
+  final Function onMenuIconTap;
+  Profile({this.onMenuIconTap});
+
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -48,73 +53,77 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onVerticalDragEnd: (details) {
-        if(details.velocity.pixelsPerSecond.dy < 0) {
-          setState(() {
-            currentProfile = MockData.profiles[1];
-            print(details.velocity.pixelsPerSecond.dy);
-          });
-        } else if(details.velocity.pixelsPerSecond.dy > 0) {
-          setState(() {
-            currentProfile = MockData.profiles[0];
-            print(details.velocity.pixelsPerSecond.dy);
-          });
-        }
-      },
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(currentProfile.userUploads.first.url),
-                fit: BoxFit.cover,
-              ),
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(currentProfile.userUploads.first.url),
+              fit: BoxFit.cover,
             ),
           ),
-          BackgroundEffectLayer(
-            fadeController: filtersPageController,
-          ),
-          AnimatedBuilder(
-            animation: profileAnimation.backdropAnimation,
-            builder: (context, child) {
-              return BackdropFilter(
-                filter: ui.ImageFilter.blur(
-                  sigmaX: profileAnimation.backdropAnimation.value,
-                  sigmaY: profileAnimation.backdropAnimation.value,
-                ),
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              );
-            },
-          ),
-          StateBuilder(
-            viewModels: [pageViewModel],
-            builder: (context, tagId) {
-              return PageView(
-                controller: controller,
-                physics: pageViewModel.physics,
-                children: <Widget>[
-                  ProfileBody(
+        ),
+        BackgroundEffectLayer(
+          fadeController: filtersPageController,
+        ),
+        AnimatedBuilder(
+          animation: profileAnimation.backdropAnimation,
+          builder: (context, child) {
+            return BackdropFilter(
+              filter: ui.ImageFilter.blur(
+                sigmaX: profileAnimation.backdropAnimation.value,
+                sigmaY: profileAnimation.backdropAnimation.value,
+              ),
+              child: Container(
+                color: Colors.transparent,
+              ),
+            );
+          },
+        ),
+        StateBuilder(
+          viewModels: [pageViewModel],
+          builder: (context, tagId) {
+            return PageView(
+              controller: controller,
+              physics: pageViewModel.physics,
+              children: <Widget>[
+                GestureDetector(
+                  onVerticalDragEnd: (details) {
+                    if(details.velocity.pixelsPerSecond.dy < 0 && pageViewModel.physics == null) {
+            setState(() {
+            currentProfile = MockData.profiles[1];
+            print(details.velocity.pixelsPerSecond.dy);
+            });
+            } else if(details.velocity.pixelsPerSecond.dy > 0) {
+            setState(() {
+            currentProfile = MockData.profiles[0];
+            print(details.velocity.pixelsPerSecond.dy);
+            });
+            }
+          },
+                  child: ProfileBody(
                     disableParentViewScroll: () {
                       pageViewModel.updatePageviewPhysics(tagId);
+                    },
+                    onMenuTap: () {
+                      pageViewModel.updatePageviewPhysics(tagId);
+                      widget.onMenuIconTap();
                     },
                     pageViewModel: pageViewModel,
                     opacityAnimation: profileAnimation.opacityAnimation,
                     controller: controller,
                     currentProfile: currentProfile,
                     filtersPageController: filtersPageController,),
-                  ProfileInfo(currentProfile: currentProfile, pageController: controller,),
-                  DiaryPage(currentProfile: currentProfile, pageController: controller),
+                ),
+                ProfileInfo(currentProfile: currentProfile, pageController: controller,),
+                DiaryPage(currentProfile: currentProfile, pageController: controller),
 
-                ],
-              );
-            },
-          ),
-        ],
-      ),
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }

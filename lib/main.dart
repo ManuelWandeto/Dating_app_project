@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/Profile.dart';
 import 'package:flirtr/RangeSliderShape.dart';
 import 'package:flirtr/SliderThumbShape.dart';
+import 'screens/MainPage.dart';
 
 void main() => runApp(FlirtrApp());
 
@@ -10,9 +10,9 @@ class FlirtrApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Profile.id,
+      initialRoute: MainPage.id,
       routes: <String, WidgetBuilder>{
-        Profile.id: (context) => Profile(),
+        MainPage.id: (context) => MainPage(),
       },
       title: 'Flirtr',
       theme: ThemeData(

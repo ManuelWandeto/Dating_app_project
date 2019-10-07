@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flirtr/UserProfile.dart';
 import 'package:flirtr/AppWidgets/iconBubbleWidget.dart';
