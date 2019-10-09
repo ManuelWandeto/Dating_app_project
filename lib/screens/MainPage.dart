@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kf_drawer/kf_drawer.dart';
@@ -10,10 +12,19 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
 
-  bool menuOpen = false;
   KFDrawerController drawerController;
+  AnimationController menuController;
+  bool _menuIsOpen = false;
+  StreamController<bool> menuStateChanged = StreamController();
+
+  @override
+  void dispose() {
+    menuStateChanged.close();
+    super.dispose();
+  }
+
   @override
   void initState() {
     TextStyle style = TextStyle(
@@ -23,10 +34,17 @@ class _MainPageState extends State<MainPage> {
       letterSpacing: 18.0 * .05,
       color: Color(0xffF8F4E3),
     );
+    menuController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+
 
     drawerController = KFDrawerController(
       initialPage: Profile(
-        onMenuIconTap: _handleMenu,
+        menuStateChange: menuStateChanged.stream,
+        onMenuIconTap: animateButton,
+        menuController: menuController,
       ),
       items: <KFDrawerItem> [
         KFDrawerItem.initWithPage(
@@ -39,7 +57,10 @@ class _MainPageState extends State<MainPage> {
             'Explore',
             style: style,
           ),
-          page: Profile(),
+          page: Profile(menuStateChange: menuStateChanged.stream,),
+          onPressed: () {
+            animateButton();
+          },
         ),
         KFDrawerItem.initWithPage(
           icon: Icon(
@@ -90,11 +111,15 @@ class _MainPageState extends State<MainPage> {
         ),
       ],
     );
+
     super.initState();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: KFDrawer(
         drawerWidth: .55, //from 0 to 1 of the screen width
@@ -111,13 +136,17 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  _handleMenu() {
-    if(menuOpen != true) {
+
+  void animateButton() {
+    if(_menuIsOpen != true) {
+      menuController.forward(from: 0.0);
       drawerController.open();
-      menuOpen = true;
     } else {
+      menuController.reverse(from: 1.0);
       drawerController.close();
-      menuOpen = false;
     }
+    _menuIsOpen = !_menuIsOpen;
+
+    menuStateChanged.sink.add(_menuIsOpen);
   }
 }

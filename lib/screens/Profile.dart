@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:flirtr/AppWidgets/ProfileBackgroundEffect.dart';
@@ -16,7 +18,9 @@ import 'DiaryPage.dart';
 class Profile extends KFDrawerContent {
   static const String id = 'Profile';
   final Function onMenuIconTap;
-  Profile({this.onMenuIconTap});
+  final AnimationController menuController;
+  Stream<bool> menuStateChange;
+  Profile({this.onMenuIconTap, this.menuController, @required this.menuStateChange});
 
   @override
   _ProfileState createState() => _ProfileState();
@@ -35,11 +39,15 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    widget.menuStateChange.listen((data) {
+      pageViewModel.updatePageviewPhysics();
+    });
     filtersPageController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1),
     );
-    profileAnimation = ProfilePageAnimation(filtersPageController: filtersPageController);
+    profileAnimation =
+        ProfilePageAnimation(filtersPageController: filtersPageController);
     filterModel = FilterIconModel(filterPageController: filtersPageController);
     pageViewModel = PageViewModel();
     super.initState();
@@ -83,6 +91,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
         ),
         StateBuilder(
           viewModels: [pageViewModel],
+          tag: 'PageView',
           builder: (context, tagId) {
             return PageView(
               controller: controller,
@@ -90,35 +99,40 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
               children: <Widget>[
                 GestureDetector(
                   onVerticalDragEnd: (details) {
-                    if(details.velocity.pixelsPerSecond.dy < 0 && pageViewModel.physics == null) {
-            setState(() {
-            currentProfile = MockData.profiles[1];
-            print(details.velocity.pixelsPerSecond.dy);
-            });
-            } else if(details.velocity.pixelsPerSecond.dy > 0) {
-            setState(() {
-            currentProfile = MockData.profiles[0];
-            print(details.velocity.pixelsPerSecond.dy);
-            });
-            }
-          },
+                    if (details.velocity.pixelsPerSecond.dy < 0 &&
+                        pageViewModel.physics == null) {
+                      setState(() {
+                        currentProfile = MockData.profiles[1];
+                        print(details.velocity.pixelsPerSecond.dy);
+                      });
+                    } else if (details.velocity.pixelsPerSecond.dy > 0) {
+                      setState(() {
+                        currentProfile = MockData.profiles[0];
+                        print(details.velocity.pixelsPerSecond.dy);
+                      });
+                    }
+                  },
                   child: ProfileBody(
                     disableParentViewScroll: () {
-                      pageViewModel.updatePageviewPhysics(tagId);
+                      pageViewModel.updatePageviewPhysics();
                     },
                     onMenuTap: () {
-                      pageViewModel.updatePageviewPhysics(tagId);
                       widget.onMenuIconTap();
                     },
+                    menuController: widget.menuController,
                     pageViewModel: pageViewModel,
                     opacityAnimation: profileAnimation.opacityAnimation,
                     controller: controller,
                     currentProfile: currentProfile,
-                    filtersPageController: filtersPageController,),
+                    filtersPageController: filtersPageController,
+                  ),
                 ),
-                ProfileInfo(currentProfile: currentProfile, pageController: controller,),
-                DiaryPage(currentProfile: currentProfile, pageController: controller),
-
+                ProfileInfo(
+                  currentProfile: currentProfile,
+                  pageController: controller,
+                ),
+                DiaryPage(
+                    currentProfile: currentProfile, pageController: controller),
               ],
             );
           },
@@ -127,6 +141,3 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     );
   }
 }
-
-
-
